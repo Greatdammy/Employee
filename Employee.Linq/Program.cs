@@ -9,75 +9,99 @@ namespace Employee.Linq
     {
         static void Main()
         {
-            var emp = new List<Employee>();
-            emp.Add(new Employee { Id = 0001, Name = "Adekunle Victor", Age = 24, Gender = "Male", Salary = 150000 });
-            emp.Add(new Employee { Id = 0002, Name = "Olabisi Esther ", Age = 21, Gender = "Female", Salary = 250000 });
-            emp.Add(new Employee { Id = 0003, Name = "Adebimpe Morayo", Age = 20, Gender = "Female", Salary = 200000 });
-            emp.Add(new Employee { Id = 0004, Name = "Obafemi Olaolu", Age = 26, Gender = "Male", Salary = 700000 });
-            emp.Add(new Employee { Id = 0005, Name = "Nwafor Chisom", Age = 27, Gender = "Male", Salary = 250000 });
-            emp.Add(new Employee { Id = 0006, Name = "Adeyemi Richard", Age = 29, Gender = "Male", Salary = 300000 });
-            emp.Add(new Employee { Id = 0007, Name = "Lawal Victoria", Age = 22, Gender = "Feale", Salary = 100000 });
-            emp.Add(new Employee { Id = 0008, Name = "Adeniyi Esther", Age = 21, Gender = "Female", Salary = 190000 });
-            emp.Add(new Employee { Id = 0009, Name = "Bamidele Segun", Age = 30, Gender = "Male", Salary = 350000 });
-            emp.Add(new Employee { Id = 0010, Name = "Olatunde Bukunmi", Age = 26, Gender = "Female", Salary = 500000 });
+            var allstudent = Student.GetClasses();
+            var teacher = Standard.GetStandard();
+
+            //GroupJoin
+            //var data = from d in teacher
+            //           join c in allstudent
+            //           on d.id equals c.Standard into groupedteacher
+            //           select new
+            //           {
+            //               d.id,
+            //               d.ClassTeacher,
+            //               groupedteacher
+            //           };
+            //foreach(var item in data)
+            //{
+            //    Console.WriteLine($"Name: {item.ClassTeacher} : Id: {item.id}");
+            //    foreach(var itempro in item.groupedteacher)
+            //    {
+            //        Console.WriteLine($"----{itempro.Name}------{itempro.RollNo}");
+            //    }
+            //}
 
 
-            var work = emp.Where(x => x.Age > 25)
-                           .OrderByDescending(x => x.Age);
-
-            foreach (var employee in work)
+            //Left outer join
+            var datas = from d in teacher
+                        join c in allstudent
+                        on d.id equals c.Standard into groupedstdent
+                        from g in groupedstdent.DefaultIfEmpty()
+                        select new
+                        {
+                            d.id,
+                            d.ClassTeacher,
+                            Classstdent = g == null ? "no student" : g.Name,
+                            classnumber = g == null ? 0 : g.RollNo
+                        };
+            foreach(var item in datas)
             {
-                Console.WriteLine($"ID: {employee.Id} : Name:{employee.Name} Age: {employee.Age} : Gender: {employee.Gender} :" +
-                    $"Salary: {employee.Salary}");
+                Console.WriteLine($"Name: {item.ClassTeacher}: Id: {item.id} RollNumber: {item.classnumber} classname: {item.Classstdent}");
             }
 
 
-            var work2 = emp.Where(x => x.Gender == "Female")
-                           .OrderBy(x => x.Gender);
 
-            Console.WriteLine();
+            //extension method based (group join) syntax
+           //var newdata = allstudent.GroupJoin(teacher,
+           //                         b => b.Standard,
+           //                         x => x.id, (bt, groupedteacher) => new
+           //                         {
+           //                             studentname = bt.Name,
+           //                             Id = bt.Standard,
+           //                            Gender = bt.Gender,
+           //                             groupedteacher
+           //                         });
 
-            foreach(var employee in work2)
-            {
-                Console.WriteLine($"ID: {employee.Id} : Name:{employee.Name} Age: {employee.Age} : Gender: {employee.Gender} :" +
-                    $"Salary: {employee.Salary}");
-            }
+           // foreach (var item in newdata)
+           // {
+           //     Console.WriteLine($"Name: {item.studentname} : Id: {item.Id} : Gender: {item.Gender} ");
+           //     foreach (var itempro in item.groupedteacher)
+           //     {
+           //         Console.WriteLine($"----{itempro.ClassTeacher}------{itempro.id}");
+           //     }
+           // }
+            /**  //Query syntax
+              var data = from b in allstudent
+                         join x in teacher
+                         on b.Standard equals x.id
+                         select new
+                         {
+                             b.Name,
+                             x.ClassTeacher,
+                             x.id,
+                             b.Gender
+                         };
 
-            Console.WriteLine();
+              //Extention method/BasedSyntax
+              var newdata = allstudent.Join(teacher,
+                                          b => b.Standard,
+                                          x => x.id, (bt, x1) => new
+                                          {
+                                              bt.Name,
+                                              x1.ClassTeacher,
+                                              bt.Standard,
+                                              bt.Gender,
+                                              x1.Fees
 
-            var work3 = emp.Where(x => (x.Age == 20) || (x.Age == 30) || (x.Age == 35))
-                           .OrderBy(x => x.Name);
-
-            foreach(var employee in work3)
-            {
-                Console.WriteLine($"ID: {employee.Id} : Name:{employee.Name} Age: {employee.Age} : Gender: {employee.Gender} :" +
-                    $"Salary: {employee.Salary}");
-            }
-
-            Console.WriteLine();
-
-
-            var work4 = emp.Where(x => x.Id <= 0008 && x.Gender == "Female" )
-                            .OrderBy(x => x.Gender == "Female"  );
+                                          }).Where(b => b.Standard > 6)
+                                            .OrderByDescending(x => x.Fees);
 
 
-            foreach(var employee in work4)
-            {
-                Console.WriteLine($"ID: {employee.Id} : Name:{employee.Name} Age: {employee.Age} : Gender: {employee.Gender} :" +
-                    $"Salary: {employee.Salary}");
-            }
 
+              foreach(var alldata in newdata)
+              {
+                  Console.WriteLine($"StudentName {alldata.Name}: Teacher: {alldata.ClassTeacher} ID: {alldata.Standard}");
+              }*/
         }
-
-       
-    }
-
-    public class Employee
-    {
-        public int Id { get; set; } 
-        public string Name { get; set; }
-        public int Age { get; set; }   
-        public string Gender { get; set; } 
-        public double Salary { get; set; }  
-    }
+    } 
 }
