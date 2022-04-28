@@ -52,24 +52,24 @@ namespace Employee.Linq
 
 
             //extension method based (group join) syntax
-            var newdata = allstudent.GroupJoin(teacher,
-                                     b => b.Standard,
-                                     x => x.id, (bt, groupedteacher) => new
-                                     {
-                                         studentname = bt.Name,
-                                         Id = bt.Standard,
-                                         Gender = bt.Gender,
-                                         groupedteacher
-                                     });
+            //var newdata = allstudent.GroupJoin(teacher,
+            //                         b => b.Standard,
+            //                         x => x.id, (bt, groupedteacher) => new
+            //                         {
+            //                             studentname = bt.Name,
+            //                             Id = bt.Standard,
+            //                             Gender = bt.Gender,
+            //                             groupedteacher
+            //                         });
 
-            foreach (var item in newdata)
-            {
-                Console.WriteLine($"Name: {item.studentname} : Id: {item.Id} : Gender: {item.Gender} ");
-                foreach (var itempro in item.groupedteacher)
-                {
-                    Console.WriteLine($"----{itempro.ClassTeacher}------{itempro.id}");
-                }
-            }
+            //foreach (var item in newdata)
+            //{
+            //    Console.WriteLine($"Name: {item.studentname} : Id: {item.Id} : Gender: {item.Gender} ");
+            //    foreach (var itempro in item.groupedteacher)
+            //    {
+            //        Console.WriteLine($"----{itempro.ClassTeacher}------{itempro.id}");
+            //    }
+            //}
             /**  //Query syntax
               var data = from b in allstudent
                          join x in teacher
