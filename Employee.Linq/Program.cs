@@ -65,7 +65,8 @@ namespace Employee.Linq
             {
                 Console.WriteLine($"ID: {employee.Id} : Name:{employee.Name} Age: {employee.Age} : Gender: {employee.Gender} :" +
                     $"Salary: {employee.Salary}");
-            }
+            }    
+
 
         }
 
