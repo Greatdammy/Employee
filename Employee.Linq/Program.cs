@@ -12,6 +12,25 @@ namespace Employee.Linq
             var allstudent = Student.GetClasses();
             var teacher = Standard.GetStandard();
 
+            //Group join query syntax
+            var data = from x in teacher
+                       join y in allstudent
+                       on x.id equals y.Standard into groups
+                       select new
+                       {
+                           x.id,
+                           x.ClassTeacher,
+                           groups
+                       };
+            foreach(var group in data)
+            {
+                Console.WriteLine($"Teachers {group.ClassTeacher}");
+                foreach (var x in group.groups)
+                {
+                    Console.WriteLine($"{x.Name} : {x.Standard}");
+                }
+            }
+
             ////GroupJoin
             //var data = from d in teacher
             //           join c in allstudent
